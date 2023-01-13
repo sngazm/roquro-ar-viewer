@@ -12,6 +12,8 @@
     "dev": "netlify dev"
   },
   "dependencies": {
-    "@prisma/client": "^4.7.1"
+    "@google-cloud/storage": "^6.9.0",
+    "@prisma/client": "^4.7.1",
+    "lambda-multipart-parser": "^1.0.1"
   }
 }
