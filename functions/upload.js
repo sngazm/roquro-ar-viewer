@@ -3,7 +3,6 @@ const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
 const Multipart = require('lambda-multipart-parser')
 const { Storage } = require('@google-cloud/storage');
-const fs = require('fs')
 
 const headers = {
   'Access-Control-Allow-Origin': '*',
@@ -17,22 +16,21 @@ exports.handler = async (event, context, callback) => {
     const buffer = multipartBuffer.files[0].content
     
     const publicUrl = await uploadToStorage(buffer).catch(e => {
-      console.error(e)
-      return { statusCode: 500 }
+      throw new Error(e)
     })
 
     const dbResult = await prisma.utsuwa.create({
       data: {
-        url: publicUrl,
+        url: publicUrl
       }
     })
-    console.log({dbResult})
-    console.log(context)
 
     const response = {
       statusCode: 201,
       headers: headers,
-      body: dbResult.id
+      body: JSON.stringify({
+        id: dbResult.id
+      })
     }
     
     return response
