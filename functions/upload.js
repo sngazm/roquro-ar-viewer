@@ -16,6 +16,7 @@ exports.handler = async (event, context, callback) => {
     const buffer = multipartBuffer.files[0].content
     
     const publicUrl = await uploadToStorage(buffer).catch(e => {
+      console.error(e)
       throw new Error(e)
     })
 
@@ -60,7 +61,7 @@ async function uploadToStorage(buffer) {
       resolve(publicUrl)
     })
     stream.on('error', (err) => {
-      console.log(err)
+      console.error(err)
       reject(err)
     })
     stream.end(buffer)
