@@ -23,12 +23,23 @@ exports.handler = async (event, context, callback) => {
       }
     })
     console.log(dbResult)
+
+    if (dbResult == null) {
+      return {
+        statusCode: 404,
+        headers: headers,
+        body: JSON.stringify({
+          message: '指定IDのデータが存在しません'
+        })
+      }
+    }
     const response = {
       statusCode: 200,
       headers: headers,
       body: JSON.stringify({
         id: dbResult.id,
-        publicUrl: dbResult.url
+        publicUrl: dbResult.url,
+        createdAt: dbResult.createdAt
       })
     }
     console.log(response)

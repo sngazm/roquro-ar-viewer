@@ -53,6 +53,9 @@
       width: 100vw;
       height: 100vh;
     }
+    model-viewer.hidden {
+      display: none;
+    }
 
     .ar-button {
       position: absolute;
@@ -124,6 +127,20 @@
       }
     }
 
+    .no-id, .no-file {
+      display: none;
+      width: 100%;
+      line-height: 1.9;
+      color: #fff;
+      text-align: center;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    .no-id.show, .no-file.show {
+      display: block;
+    }
+
   </style>
 </head>
 <body>
@@ -159,6 +176,13 @@
       </button>
     </model-viewer>
   </div>
+  <p id="noId" class="no-id">
+    バーチャルろくろARお持ち帰りは、バーチャルろくろシステムの専用ARビューワーサービスです。<br>
+    専用のQRコードからこのサイトにアクセスすると、作った器をARで持ち帰ることができます。
+  </p>
+  <p id="noFile" class="no-file">
+    器のデータが見つかりませんでした。器のアップロードに失敗しているか、URLが間違っている可能性があります。
+  </p>
 
   <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 
@@ -173,18 +197,34 @@
         e.preventDefault()
       }
     }, {passive: false})
+    console.log(id)
 
     if (id !== null) {
       const url = `/.netlify/functions/getModel?id=${id}`
       fetch(url)
         .then((response) => {
+          console.log(response)
+          if (!response.ok) { throw new Error(response.statusText) }
+          
           return response.json()
         })
         .then(response => {
           console.log(response)
           const viewer = document.getElementById('viewer')
           viewer.setAttribute('src', response.publicUrl)
+
         })
+        .catch(e => {
+          console.error("CATCH")
+          console.error(e)
+          if (e.message === "Not Found") {
+            document.getElementById('noFile').classList.add('show')
+            document.getElementById('viewer').classList.add('hidden')
+          }
+        })
+    } else {
+      document.getElementById('noId').classList.add('show')
+      document.getElementById('viewer').classList.add('hidden')
     }
 
   </script>
