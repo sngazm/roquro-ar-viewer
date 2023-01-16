@@ -14,7 +14,10 @@ exports.handler = async (event, context, callback) => {
 
     const id = await event.queryStringParameters['id']
     if (id == null) {
-      throw new Error('IDが指定されていません')
+      throw new Error('No ID')
+    }
+    if (isNaN(id)) {
+      throw new Error('Not A Number')
     }
 
     const dbResult = await prisma.utsuwa.findUnique({
@@ -22,17 +25,13 @@ exports.handler = async (event, context, callback) => {
         id: Number(id)
       }
     })
+    
     console.log(dbResult)
 
     if (dbResult == null) {
-      return {
-        statusCode: 404,
-        headers: headers,
-        body: JSON.stringify({
-          message: '指定IDのデータが存在しません'
-        })
-      }
+      throw new Error('Not Found')
     }
+
     const response = {
       statusCode: 200,
       headers: headers,
@@ -48,8 +47,21 @@ exports.handler = async (event, context, callback) => {
     
   } catch (err) {
     console.error(err)
+    if (err.message === 'Not Found' || err.message === "Not A Number") {
+      return {
+        statusCode: 404,
+        headers: headers,
+        body: JSON.stringify({
+          message: '指定IDのデータが存在しません'
+        })
+      }
+    }
     return {
-      statusCode: 500
+      statusCode: 500,
+      headers: headers,
+      body: JSON.stringify({
+        message: 'サーバー内部エラー'
+      })
     }
   }
 }

@@ -11,7 +11,7 @@
     body {
       min-height: 100vh;
       min-height: -webkit-fill-available;
-      
+      font: "Helvetica Neue", sans-serif;
       background: linear-gradient(235deg, #21473f, #16505d, #96931d);
       background-size: 600% 600%;
       -webkit-animation: AnimationName 10s ease infinite;
@@ -45,6 +45,11 @@
       font: "Helvetica Neue", sans-serif;
       font-size: 26px;
     }
+
+    .viewer-wrap.hidden {
+      display: none;
+    }
+
     model-viewer {
       position: absolute;
       z-index: 0;
@@ -140,6 +145,16 @@
     .no-id.show, .no-file.show {
       display: block;
     }
+    .utsuwa-data {
+      position: absolute;
+      z-index: -1;
+      bottom: 0;
+      width: 100%;
+      padding-bottom: 6rem;
+      text-align: right;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.5);
+    }
 
   </style>
 </head>
@@ -152,7 +167,7 @@
       
     </div>
   </div>
-  <div class="viewer">
+  <div id="viewerWrap" class="viewer">
     <model-viewer
       id="viewer"
       camera-controls
@@ -175,6 +190,10 @@
         ARで表示
       </button>
     </model-viewer>
+    <div id="utsuwaData" class="utsuwa-data container px-6">
+      <p>Utsuwa ID: <span id="utsuwaId"></span></p>
+      <p>Created At: <span id="utsuwaCreatedAt"></span></p>
+    </div>
   </div>
   <p id="noId" class="no-id">
     バーチャルろくろARお持ち帰りは、バーチャルろくろシステムの専用ARビューワーサービスです。<br>
@@ -183,6 +202,8 @@
   <p id="noFile" class="no-file">
     器のデータが見つかりませんでした。器のアップロードに失敗しているか、URLが間違っている可能性があります。
   </p>
+
+  
 
   <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 
@@ -212,19 +233,22 @@
           console.log(response)
           const viewer = document.getElementById('viewer')
           viewer.setAttribute('src', response.publicUrl)
-
+          const id = document.getElementById('utsuwaId')
+          id.innerText = response.id;
+          const createdAt = document.getElementById('utsuwaCreatedAt')
+          createdAt.innerText = response.createdAt
         })
         .catch(e => {
           console.error("CATCH")
           console.error(e)
           if (e.message === "Not Found") {
             document.getElementById('noFile').classList.add('show')
-            document.getElementById('viewer').classList.add('hidden')
+            document.getElementById('viewerWrap').classList.add('hidden')
           }
         })
     } else {
       document.getElementById('noId').classList.add('show')
-      document.getElementById('viewer').classList.add('hidden')
+      document.getElementById('viewerWrap').classList.add('hidden')
     }
 
   </script>
