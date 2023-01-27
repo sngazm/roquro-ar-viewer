@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
 <head>
   <title>バーチャルろくろ ARお持ち帰り</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@0.7.4/dist/tailwind.min.css" />
@@ -12,7 +12,7 @@
       min-height: 100vh;
       min-height: -webkit-fill-available;
       font: "Helvetica Neue", sans-serif;
-      background: linear-gradient(235deg, #21473f, #16505d, #96931d);
+      /* background: linear-gradient(235deg, #21473f, #16505d, #96931d);
       background-size: 600% 600%;
       -webkit-animation: AnimationName 10s ease infinite;
       -moz-animation: AnimationName 10s ease infinite;
@@ -38,6 +38,16 @@
         0%{background-position:49% 0%}
         50%{background-position:52% 100%}
         100%{background-position:49% 0%}
+    } */
+    }
+    .bg-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: -1;
+      width: 100vw;
+      height: 100vh;
+      background-color: #333;
     }
     .title {
       color: white;
@@ -202,10 +212,10 @@
   <p id="noFile" class="no-file">
     器のデータが見つかりませんでした。器のアップロードに失敗しているか、URLが間違っている可能性があります。
   </p>
-
-  
+  <canvas class="bg-canvas glsl-canvas" data-fragment-url="bg.frag" width="500" height="500"></canvas>
 
   <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+  <script type="text/javascript" src="https://unpkg.com/glsl-canvas-js/dist/umd/glsl-canvas.min.js"></script>
 
   <script>
     const url = new URL(window.location.href)
