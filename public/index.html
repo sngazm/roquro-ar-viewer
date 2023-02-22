@@ -2,8 +2,8 @@
 <html lang="ja">
 <head>
   <title>バーチャルろくろ ARお持ち帰り</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@0.7.4/dist/tailwind.min.css" />
   <meta meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+  <script src="https://cdn.tailwindcss.com"></script>
   <style type="text/css">
     html {
       height: -webkit-fill-available;
@@ -72,19 +72,6 @@
       display: none;
     }
 
-    .ar-button {
-      position: absolute;
-      z-index: 1;
-      top: 70%;
-      left: 50%;
-      transform: translateX(-50%);
-      padding: 20px 40px;
-      font-size: 22px;
-      font-weight: bold;
-      background-color: #fff;
-      border: 3px solid #fafafa;
-      border-radius: 8px;
-    }
     
     .loading {
       position: absolute;
@@ -157,7 +144,7 @@
     }
     .utsuwa-data {
       position: absolute;
-      z-index: -1;
+      z-index: 0;
       bottom: 0;
       width: 100%;
       padding-bottom: 6rem;
@@ -196,10 +183,11 @@
         </div>
       </div>
       
-      <button slot="ar-button" class="ar-button">
-        ARで表示
+      <button slot="ar-button" class="fixed bottom-32 m-auto left-0 right-0 w-48">
+        <img src="/ar.png" alt="ARで開く"/>
       </button>
     </model-viewer>
+
     <div id="utsuwaData" class="utsuwa-data container px-6">
       <p>Utsuwa ID: <span id="utsuwaId"></span></p>
       <p>Created At: <span id="utsuwaCreatedAt"></span></p>
@@ -212,7 +200,7 @@
   <p id="noFile" class="no-file">
     器のデータが見つかりませんでした。器のアップロードに失敗しているか、URLが間違っている可能性があります。
   </p>
-  <canvas class="bg-canvas glsl-canvas" data-fragment-url="bg.frag" width="500" height="500"></canvas>
+  <canvas class="bg-canvas glsl-canvas" data-fragment-url="flash-bg.frag" width="500" height="500"></canvas>
 
   <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
   <script type="text/javascript" src="https://unpkg.com/glsl-canvas-js/dist/umd/glsl-canvas.min.js"></script>
